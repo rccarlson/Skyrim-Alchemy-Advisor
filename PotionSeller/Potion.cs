@@ -86,8 +86,6 @@ namespace PotionSeller
                         if (potion.effects.Count > 0 /*&& !potion.ContainedByList(potions)*/)
                             potions.Add(potion);
                     }
-            int a = potions[0].GetHashCode();
-            int b = potions[1].GetHashCode();
             return new List<Potion>(potions.Distinct(new PotionComparer()));
         }
         public static List<string> GetUniqueEffects(List<Potion> potions)
