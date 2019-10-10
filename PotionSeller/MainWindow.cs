@@ -36,9 +36,10 @@ namespace PotionSeller
             using (StreamReader reader = new StreamReader(file))
             {
                 reader.ReadLine();
-                while (file.Position < file.Length)
+                string line;
+                while ((line=reader.ReadLine()) != null)
                 {
-                    ingredients.Add(new Ingredient(reader.ReadLine()));
+                    ingredients.Add(new Ingredient(line));
                 }
             }
             return ingredients;
@@ -72,6 +73,7 @@ namespace PotionSeller
 
             //Post unique potion types to the window
             List<string> uniqueEffects = Potion.GetUniqueEffects(potions);
+            SortStringsByCommaCount(ref uniqueEffects);
             potionListBox.Items.AddRange(uniqueEffects.ToArray());
 
             SetEnabled(true);
@@ -148,6 +150,33 @@ namespace PotionSeller
                 ingredientBox.SetItemChecked(i, check);
             potionListBox.Items.Clear();
             potionOptions.Items.Clear();
+        }
+
+        void SortStringsByCommaCount(ref List<string> vs)
+        {
+            List<int> count = new List<int>();
+            vs.ForEach(c => count.Add(c.Count(ch => ch == ',')));
+            bool changeMade;
+            do
+            {
+                changeMade = false;
+                for (int i = 0; i < vs.Count - 1; i++)
+                {
+                    if (count[i] < count[i+1])
+                    {
+                        //string swap
+                        string temp = vs[i];
+                        vs[i] = vs[i + 1];
+                        vs[i + 1] = temp;
+                        //count swap
+                        int tempCount = count[i];
+                        count[i] = count[i + 1];
+                        count[i + 1] = tempCount;
+
+                        changeMade = true;
+                    }
+                }
+            } while (changeMade);
         }
     }
 }

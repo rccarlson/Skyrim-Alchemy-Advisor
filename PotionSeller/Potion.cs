@@ -10,6 +10,7 @@ namespace PotionSeller
     {
         public readonly List<string> effects;
         public readonly Ingredient[] ingredients;
+
         public Potion(Ingredient[] ingredients)
         {
             if (ingredients[1] == ingredients[2])
