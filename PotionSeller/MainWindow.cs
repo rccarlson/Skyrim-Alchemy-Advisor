@@ -13,6 +13,7 @@ namespace PotionSeller
 {
     public partial class MainWindow : Form
     {
+        string potionListBoxLabel;
         public readonly Ingredient[] ingredients;
         public readonly string[] effects;
         private Potion[] potions;
@@ -23,11 +24,14 @@ namespace PotionSeller
             effects = GetEffects(ingredients).ToArray();
 
             InitializeComponent();
+            potionListBoxLabel = potionLabel.Text;
 
             //Populate boxes
             foreach (Ingredient ingredient in ingredients)
                 ingredientBox.Items.Add(ingredient);
             LoadInventory();
+            foreach(string effect in effects)
+                effectsBox.Items.Add(effect);
         }
         static List<Ingredient> GetIngredients(string filename)
         {
@@ -55,9 +59,13 @@ namespace PotionSeller
             return effects;
         }
 
-        private void CalculatePotions(object sender, EventArgs e)
+        private void CalculatePotionsClick(object sender, EventArgs e)
         {
-            SetEnabled(false);
+            CalculatePotions();
+        }
+        void CalculatePotions()
+        {
+            SetWindowEnabled(false);
             SaveInventory();
             potionListBox.Items.Clear();
             potionOptions.Items.Clear();
@@ -71,13 +79,42 @@ namespace PotionSeller
             List<Potion> potions = Potion.GetAllPossiblePotions(checkedIngredients.ToArray());
             this.potions = potions.ToArray();
 
-            //Post unique potion types to the window
+            //Update output window
             List<string> uniqueEffects = Potion.GetUniqueEffects(potions);
+            if (effectsBox.CheckedItems.Count > 0)
+            {
+                //one or more items is selected in the effects box
+                List<string> selectedEffects = new List<string>();
+                foreach (string s in effectsBox.CheckedItems)
+                    selectedEffects.Add(s);
+
+                for (int i = uniqueEffects.Count - 1; i >= 0; i--)
+                {
+                    //remove all unique effects not satisfied by effectsBox
+                    if (!Potion.AllEffectsPresent(uniqueEffects[i], selectedEffects))
+                    {
+                        //not all selected effects are present
+                        uniqueEffects.RemoveAt(i);
+                    }
+                    else if (findEffectsExclusiveCheckBox.Checked && !Potion.AllEffectsPresentExclusive(uniqueEffects[i], selectedEffects))
+                    {
+                        //effect does not match checks
+                        uniqueEffects.RemoveAt(i);
+                    }
+                }
+            }
             SortStringsByCommaCount(ref uniqueEffects);
             potionListBox.Items.AddRange(uniqueEffects.ToArray());
 
-            SetEnabled(true);
+            potionLabel.Text = potionListBoxLabel + " (" + Convert.ToString(potionListBox.Items.Count) + ")";
+
+            SetWindowEnabled(true);
         }
+
+        #region INVENTORY STORAGE
+        /// <summary>
+        /// Saves inventory preferances to storage
+        /// </summary>
         void SaveInventory()
         {
             ////Clear application settings
@@ -90,6 +127,9 @@ namespace PotionSeller
             }
             PotionSeller.Properties.Settings.Default.Save();
         }
+        /// <summary>
+        /// Loads inventory preferences from storage
+        /// </summary>
         void LoadInventory()
         {
             PotionSeller.Properties.Settings.Default.Reload();
@@ -111,12 +151,20 @@ namespace PotionSeller
                 PotionSeller.Properties.Settings.Default.Reset();
             }
         }
-        void SetEnabled(bool enabled)
+        #endregion
+        void SetWindowEnabled(bool enabled)
         {
+            //Buttons
             calculatePotionsButton.Enabled = enabled;
             selectAllButton.Enabled = enabled;
             selectNoneButton.Enabled = enabled;
+            selectNoneEffectsButton.Enabled = enabled;
+            //Lists
             ingredientBox.Enabled = enabled;
+            effectsBox.Enabled = enabled;
+            potionListBox.Enabled = enabled;
+            //Checks
+            findEffectsExclusiveCheckBox.Enabled = enabled;
         }
 
         private void PotionListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -125,7 +173,7 @@ namespace PotionSeller
             potionOptions.Items.Clear();
             foreach(Potion potion in potions)
             {
-                if(potion.ToString() == selection)
+                if (Potion.AllEffectsPresentExclusive(selection, potion.effects))
                 {
                     potionOptions.Items.Add(potion.ingredients[0].name);
                     for(int i = 1; i < potion.ingredients.Count(); i++)
@@ -136,15 +184,24 @@ namespace PotionSeller
             }
         }
 
+        #region SELECT ALL/NONE ACTIONS
         private void SelectAllButton_Click(object sender, EventArgs e)
         {
-            SetAllIngredients(true);
+            SetAllIngredientsChecked(true);
         }
         private void SelectNoneButton_Click(object sender, EventArgs e)
         {
-            SetAllIngredients(false);
+            SetAllIngredientsChecked(false);
         }
-        void SetAllIngredients(bool check)
+        private void selectNoneEffectsButton_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < effectsBox.Items.Count; i++)
+                effectsBox.SetItemChecked(i, false);
+            CalculatePotions();
+        }
+        #endregion
+
+        void SetAllIngredientsChecked(bool check)
         {
             for(int i = 0; i < ingredientBox.Items.Count; i++)
                 ingredientBox.SetItemChecked(i, check);
@@ -152,7 +209,8 @@ namespace PotionSeller
             potionOptions.Items.Clear();
         }
 
-        void SortStringsByCommaCount(ref List<string> vs)
+        #region EFFECT PROCESSING
+        static void SortStringsByCommaCount(ref List<string> vs)
         {
             List<int> count = new List<int>();
             vs.ForEach(c => count.Add(c.Count(ch => ch == ',')));
@@ -178,5 +236,7 @@ namespace PotionSeller
                 }
             } while (changeMade);
         }
+        #endregion
+
     }
 }

@@ -122,6 +122,38 @@ namespace PotionSeller
             } while (changeMade);
         }
 
+        #region EFFECT PROCESSING
+
+        /// <summary>
+        /// All effects from <paramref name="selectedEffects"/> are present in <paramref name="effectString"/>
+        /// </summary>
+        /// <param name="effectString">Full string representing all effects of a potion</param>
+        /// <param name="selectedEffects">List of all effect strings</param>
+        /// <returns>True if all effects are found</returns>
+        public static bool AllEffectsPresent(string effectString, List<string> selectedEffects)
+        {
+            foreach (string effect in selectedEffects)
+            {
+                if (!effectString.Contains(effect))
+                    return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// Only effects from <paramref name="selectedEffects"/> are present in <paramref name="effectString"/>
+        /// </summary>
+        /// <param name="effectString">Full string representing all effects of a potion</param>
+        /// <param name="selectedEffects">List of all effect strings</param>
+        /// <returns>True if effectString is comprised of all effects from <paramref name="selectedEffects"/></returns>
+        public static bool AllEffectsPresentExclusive(string effectString, List<string> selectedEffects)
+        {
+            //if the count is different, then the two lists are not the same
+            if (effectString.Count(ch => ch == ',') + 1 != selectedEffects.Count)
+                return false;
+            return AllEffectsPresent(effectString, selectedEffects);
+        }
+        #endregion
+
         public override string ToString()
         {
             if (effects.Count > 0)
