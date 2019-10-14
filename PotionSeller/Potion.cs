@@ -89,20 +89,7 @@ namespace PotionSeller
                     }
             return new List<Potion>(potions.Distinct(new PotionComparer()));
         }
-        public static List<string> GetUniqueEffects(List<Potion> potions)
-        {
-            List<string> unique = new List<string>();
-            //SortEffectCountBubble(ref potions);
-            foreach(Potion potion in potions)
-            {
-                string s = potion.ToString();
-                if (!unique.Contains(s))
-                {
-                    unique.Add(s);
-                }
-            }
-            return unique;
-        }
+
         static void SortEffectCountBubble(ref List<Potion> potions)
         {
             bool changeMade;
@@ -123,7 +110,6 @@ namespace PotionSeller
         }
 
         #region EFFECT PROCESSING
-
         /// <summary>
         /// All effects from <paramref name="selectedEffects"/> are present in <paramref name="effectString"/>
         /// </summary>
@@ -152,8 +138,49 @@ namespace PotionSeller
                 return false;
             return AllEffectsPresent(effectString, selectedEffects);
         }
+        public static List<string> GetUniqueEffects(List<Potion> potions)
+        {
+            List<Potion> uniquePotions = new List<Potion>();
+            foreach(Potion potion in potions)
+            {
+                bool isUnique = true;
+                int potionEffectHashCode = potion.GetEffectHashCode();
+                foreach(Potion uniquePotion in uniquePotions)
+                {
+                    if (uniquePotion.GetEffectHashCode() == potionEffectHashCode)
+                    {
+                        isUnique = false;
+                        break;
+                    }
+                }
+                if (isUnique)
+                {
+                    uniquePotions.Add(potion);
+                }
+            }
+            List<string> uniqueEffects = new List<string>();
+            foreach(Potion potion in uniquePotions)
+            {
+                uniqueEffects.Add(potion.ToString());
+            }
+            return uniqueEffects;
+        }
         #endregion
 
+        public int GetEffectHashCode()
+        {
+            int effectHash = 0;
+            foreach (string effect in effects)
+                effectHash ^= effect.GetHashCode();
+            return effectHash;
+        }
+        public int GetIngredientHashCode()
+        {
+            int ingredientHash = 0;
+            foreach (Ingredient ingredient in ingredients)
+                ingredientHash ^= ingredient.name.GetHashCode();
+            return ingredientHash;
+        }
         public override string ToString()
         {
             if (effects.Count > 0)
@@ -179,12 +206,8 @@ namespace PotionSeller
         }
         public int GetHashCode(Potion potion)
         {
-            int ingredientHash = 0;
-            int effectHash = 0;
-            foreach (Ingredient ingredient in potion.ingredients)
-                ingredientHash ^= ingredient.name.GetHashCode();
-            foreach (string effect in potion.effects)
-                effectHash ^= effect.GetHashCode();
+            int ingredientHash = potion.GetIngredientHashCode();
+            int effectHash = potion.GetEffectHashCode();
             return ingredientHash ^ effectHash;
         }
     }
