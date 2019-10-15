@@ -32,6 +32,9 @@ namespace PotionSeller
             LoadInventory();
             foreach(string effect in effects)
                 effectsBox.Items.Add(effect);
+
+            //Start background worker
+            liveUpdateWorker.RunWorkerAsync();
         }
         static List<Ingredient> GetIngredients(string filename)
         {
@@ -61,14 +64,17 @@ namespace PotionSeller
 
         private void CalculatePotionsClick(object sender, EventArgs e)
         {
+            SetWindowEnabled(false);
+            SaveInventory();
+            //potionListBox.Items.Clear();
+            //potionOptions.Items.Clear();
+
             CalculatePotions();
+
+            SetWindowEnabled(true);
         }
         void CalculatePotions()
         {
-            SetWindowEnabled(false);
-            SaveInventory();
-            potionListBox.Items.Clear();
-            potionOptions.Items.Clear();
 
             //Get all possible potions
             List<Ingredient> checkedIngredients = new List<Ingredient>();
@@ -104,11 +110,17 @@ namespace PotionSeller
                 }
             }
             SortStringsByCommaCount(ref uniqueEffects);
-            potionListBox.Items.AddRange(uniqueEffects.ToArray());
+            //potionListBox.Items.Clear();
+            //potionOptions.Items.Clear();
+            //potionListBox.Items.AddRange(uniqueEffects.ToArray());
+            //potionLabel.Text = potionListBoxLabel + " (" + Convert.ToString(potionListBox.Items.Count) + ")";
+            this.Invoke(new MethodInvoker(potionListBox.Items.Clear));
+            this.Invoke(new MethodInvoker(potionOptions.Items.Clear));
+            this.Invoke(new MethodInvoker(delegate { potionListBox.Items.AddRange(uniqueEffects.ToArray()); }));
 
-            potionLabel.Text = potionListBoxLabel + " (" + Convert.ToString(potionListBox.Items.Count) + ")";
+            this.Invoke(new MethodInvoker(delegate { potionLabel.Text = potionListBoxLabel + " (" + Convert.ToString(potionListBox.Items.Count) + ")"; }));
 
-            SetWindowEnabled(true);
+
         }
 
         #region INVENTORY STORAGE
@@ -238,5 +250,34 @@ namespace PotionSeller
         }
         #endregion
 
+        private void LiveUpdateWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            int hash = GetWindowCheckHash();
+            do
+            {
+                int newHash = GetWindowCheckHash();
+                if (hash != newHash)
+                {
+                    hash = newHash;
+                    if (liveUpdateCheckBox.Checked)
+                        CalculatePotions();
+                }
+                System.Threading.Thread.Sleep(100);
+            } while (!this.IsDisposed);
+        }
+        private int GetWindowCheckHash()
+        {
+            return GetFormulaHash(new List<Ingredient>(ingredientBox.CheckedItems.Cast<Ingredient>()),
+                new List<string>(effectsBox.CheckedItems.Cast<string>()));
+        }
+        private int GetFormulaHash(List<Ingredient> ingredients, List<string> effects)
+        {
+            int hash = 0;
+            foreach (Ingredient ingredient in ingredients)
+                hash ^= ingredient.name.GetHashCode();
+            foreach (string s in effects)
+                hash ^= s.GetHashCode();
+            return hash;
+        }
     }
 }

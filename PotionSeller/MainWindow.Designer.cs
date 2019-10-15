@@ -42,23 +42,27 @@
             this.effectsBox = new System.Windows.Forms.CheckedListBox();
             this.selectNoneEffectsButton = new System.Windows.Forms.Button();
             this.findEffectsExclusiveCheckBox = new System.Windows.Forms.CheckBox();
+            this.liveUpdateCheckBox = new System.Windows.Forms.CheckBox();
+            this.liveUpdateWorker = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // ingredientBox
             // 
             this.ingredientBox.CheckOnClick = true;
             this.ingredientBox.FormattingEnabled = true;
-            this.ingredientBox.Location = new System.Drawing.Point(12, 27);
+            this.ingredientBox.Location = new System.Drawing.Point(16, 33);
+            this.ingredientBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ingredientBox.Name = "ingredientBox";
-            this.ingredientBox.Size = new System.Drawing.Size(207, 664);
+            this.ingredientBox.Size = new System.Drawing.Size(275, 667);
             this.ingredientBox.TabIndex = 1;
             // 
             // ingredientLabel
             // 
             this.ingredientLabel.AutoSize = true;
-            this.ingredientLabel.Location = new System.Drawing.Point(12, 9);
+            this.ingredientLabel.Location = new System.Drawing.Point(16, 11);
+            this.ingredientLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ingredientLabel.Name = "ingredientLabel";
-            this.ingredientLabel.Size = new System.Drawing.Size(97, 13);
+            this.ingredientLabel.Size = new System.Drawing.Size(127, 17);
             this.ingredientLabel.TabIndex = 2;
             this.ingredientLabel.Text = "Ingredients owned:";
             // 
@@ -66,17 +70,20 @@
             // 
             this.potionListBox.FormattingEnabled = true;
             this.potionListBox.HorizontalScrollbar = true;
-            this.potionListBox.Location = new System.Drawing.Point(264, 27);
+            this.potionListBox.ItemHeight = 16;
+            this.potionListBox.Location = new System.Drawing.Point(352, 33);
+            this.potionListBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.potionListBox.Name = "potionListBox";
-            this.potionListBox.Size = new System.Drawing.Size(596, 212);
+            this.potionListBox.Size = new System.Drawing.Size(793, 260);
             this.potionListBox.TabIndex = 3;
             this.potionListBox.SelectedIndexChanged += new System.EventHandler(this.PotionListBox_SelectedIndexChanged);
             // 
             // calculatePotionsButton
             // 
-            this.calculatePotionsButton.Location = new System.Drawing.Point(457, 245);
+            this.calculatePotionsButton.Location = new System.Drawing.Point(352, 301);
+            this.calculatePotionsButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.calculatePotionsButton.Name = "calculatePotionsButton";
-            this.calculatePotionsButton.Size = new System.Drawing.Size(202, 23);
+            this.calculatePotionsButton.Size = new System.Drawing.Size(269, 28);
             this.calculatePotionsButton.TabIndex = 4;
             this.calculatePotionsButton.Text = "Find Valid Potions";
             this.calculatePotionsButton.UseVisualStyleBackColor = true;
@@ -85,9 +92,10 @@
             // potionLabel
             // 
             this.potionLabel.AutoSize = true;
-            this.potionLabel.Location = new System.Drawing.Point(261, 9);
+            this.potionLabel.Location = new System.Drawing.Point(348, 11);
+            this.potionLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.potionLabel.Name = "potionLabel";
-            this.potionLabel.Size = new System.Drawing.Size(115, 13);
+            this.potionLabel.Size = new System.Drawing.Size(151, 17);
             this.potionLabel.TabIndex = 5;
             this.potionLabel.Text = "Potions you can make:";
             // 
@@ -98,9 +106,10 @@
             this.ingredient2,
             this.ingredient3});
             this.potionOptions.HideSelection = false;
-            this.potionOptions.Location = new System.Drawing.Point(264, 274);
+            this.potionOptions.Location = new System.Drawing.Point(352, 337);
+            this.potionOptions.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.potionOptions.Name = "potionOptions";
-            this.potionOptions.Size = new System.Drawing.Size(596, 445);
+            this.potionOptions.Size = new System.Drawing.Size(793, 399);
             this.potionOptions.TabIndex = 7;
             this.potionOptions.UseCompatibleStateImageBehavior = false;
             this.potionOptions.View = System.Windows.Forms.View.Details;
@@ -122,9 +131,10 @@
             // 
             // selectAllButton
             // 
-            this.selectAllButton.Location = new System.Drawing.Point(12, 696);
+            this.selectAllButton.Location = new System.Drawing.Point(19, 708);
+            this.selectAllButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.selectAllButton.Name = "selectAllButton";
-            this.selectAllButton.Size = new System.Drawing.Size(97, 23);
+            this.selectAllButton.Size = new System.Drawing.Size(129, 28);
             this.selectAllButton.TabIndex = 8;
             this.selectAllButton.Text = "Select All";
             this.selectAllButton.UseVisualStyleBackColor = true;
@@ -132,9 +142,10 @@
             // 
             // selectNoneButton
             // 
-            this.selectNoneButton.Location = new System.Drawing.Point(122, 696);
+            this.selectNoneButton.Location = new System.Drawing.Point(162, 708);
+            this.selectNoneButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.selectNoneButton.Name = "selectNoneButton";
-            this.selectNoneButton.Size = new System.Drawing.Size(97, 23);
+            this.selectNoneButton.Size = new System.Drawing.Size(129, 28);
             this.selectNoneButton.TabIndex = 9;
             this.selectNoneButton.Text = "Select None";
             this.selectNoneButton.UseVisualStyleBackColor = true;
@@ -144,16 +155,18 @@
             // 
             this.effectsBox.CheckOnClick = true;
             this.effectsBox.FormattingEnabled = true;
-            this.effectsBox.Location = new System.Drawing.Point(866, 27);
+            this.effectsBox.Location = new System.Drawing.Point(1155, 33);
+            this.effectsBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.effectsBox.Name = "effectsBox";
-            this.effectsBox.Size = new System.Drawing.Size(225, 634);
+            this.effectsBox.Size = new System.Drawing.Size(299, 633);
             this.effectsBox.TabIndex = 10;
             // 
             // selectNoneEffectsButton
             // 
-            this.selectNoneEffectsButton.Location = new System.Drawing.Point(866, 673);
+            this.selectNoneEffectsButton.Location = new System.Drawing.Point(1155, 679);
+            this.selectNoneEffectsButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.selectNoneEffectsButton.Name = "selectNoneEffectsButton";
-            this.selectNoneEffectsButton.Size = new System.Drawing.Size(75, 23);
+            this.selectNoneEffectsButton.Size = new System.Drawing.Size(100, 28);
             this.selectNoneEffectsButton.TabIndex = 11;
             this.selectNoneEffectsButton.Text = "Select None";
             this.selectNoneEffectsButton.UseVisualStyleBackColor = true;
@@ -162,18 +175,35 @@
             // findEffectsExclusiveCheckBox
             // 
             this.findEffectsExclusiveCheckBox.AutoSize = true;
-            this.findEffectsExclusiveCheckBox.Location = new System.Drawing.Point(866, 702);
+            this.findEffectsExclusiveCheckBox.Location = new System.Drawing.Point(1155, 715);
+            this.findEffectsExclusiveCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.findEffectsExclusiveCheckBox.Name = "findEffectsExclusiveCheckBox";
-            this.findEffectsExclusiveCheckBox.Size = new System.Drawing.Size(201, 17);
+            this.findEffectsExclusiveCheckBox.Size = new System.Drawing.Size(262, 21);
             this.findEffectsExclusiveCheckBox.TabIndex = 13;
             this.findEffectsExclusiveCheckBox.Text = "Find potions with ONLY these effects";
             this.findEffectsExclusiveCheckBox.UseVisualStyleBackColor = true;
             // 
+            // liveUpdateCheckBox
+            // 
+            this.liveUpdateCheckBox.AutoSize = true;
+            this.liveUpdateCheckBox.Location = new System.Drawing.Point(628, 306);
+            this.liveUpdateCheckBox.Name = "liveUpdateCheckBox";
+            this.liveUpdateCheckBox.Size = new System.Drawing.Size(104, 21);
+            this.liveUpdateCheckBox.TabIndex = 14;
+            this.liveUpdateCheckBox.Text = "Live update";
+            this.liveUpdateCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // liveUpdateWorker
+            // 
+            this.liveUpdateWorker.WorkerSupportsCancellation = true;
+            this.liveUpdateWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.LiveUpdateWorker_DoWork);
+            // 
             // MainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1117, 731);
+            this.ClientSize = new System.Drawing.Size(1489, 759);
+            this.Controls.Add(this.liveUpdateCheckBox);
             this.Controls.Add(this.findEffectsExclusiveCheckBox);
             this.Controls.Add(this.selectNoneEffectsButton);
             this.Controls.Add(this.effectsBox);
@@ -185,6 +215,8 @@
             this.Controls.Add(this.potionListBox);
             this.Controls.Add(this.ingredientLabel);
             this.Controls.Add(this.ingredientBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainWindow";
@@ -210,6 +242,8 @@
         private System.Windows.Forms.CheckedListBox effectsBox;
         private System.Windows.Forms.Button selectNoneEffectsButton;
         private System.Windows.Forms.CheckBox findEffectsExclusiveCheckBox;
+        private System.Windows.Forms.CheckBox liveUpdateCheckBox;
+        private System.ComponentModel.BackgroundWorker liveUpdateWorker;
     }
 }
 
