@@ -17,13 +17,18 @@ namespace PotionSeller2
         public MainWindow()
         {
             InitializeComponent();
+
+            //Init ingredients and potions
             foreach (Ingredient ingredient in IngredientBrowser.GetAllIngredients())
                 ingredientBox.Items.Add(ingredient);
             foreach (Effect effect in effectBrowser.GetAllEffects())
                 effectBox.Items.Add(effect);
 
+            //Init perks
             for (int i = 100; i > 0; i--)
                 alchemySkill.Items.Add(i);
+            fortifyAlchemyLevel.Items.Add("1%");
+            fortifyAlchemyLevel.Items.Add("0%");
 
             LoadInventory();
 
@@ -70,6 +75,7 @@ namespace PotionSeller2
 
 
         }
+
         #region INVENTORY STORAGE
         /// <summary>
         /// Saves inventory preferances to storage
@@ -110,6 +116,17 @@ namespace PotionSeller2
                 PotionSeller2.Properties.Settings.Default.Reset();
             }
         }
+
         #endregion
+
+        private void fortifyAlchemyLevel_TextChanged(object sender, EventArgs e)
+        {
+            string contentString = fortifyAlchemyLevel.Text.Replace("%", "");
+            int contentValue = Convert.ToInt32(contentString);
+            //fortifyAlchemyLevel.Items.Clear();
+            for (int i = contentValue + 3; i >= contentValue - 1 && i>=0; i--)
+                fortifyAlchemyLevel.Items.Add(Convert.ToString(i) + "%");
+            int dummy = 0;
+        }
     }
 }
