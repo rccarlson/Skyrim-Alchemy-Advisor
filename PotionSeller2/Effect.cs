@@ -20,6 +20,20 @@ namespace PotionSeller2
             this.base_dur = base_dur;
             this.value = value;
         }
+        public static string GetEffectString(List<Effect> effects)
+        {
+            return GetEffectString(effects.ToArray());
+        }
+        public static string GetEffectString(Effect[] effects)
+        {
+            if (effects.Length == 0)
+                return null;
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < effects.Length - 2; i++)
+                builder.Append(effects[i].name + ",");
+            builder.Append(effects[effects.Length - 1]);
+            return builder.ToString();
+        }
         public override string ToString()
         {
             return name;

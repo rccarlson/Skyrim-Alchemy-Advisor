@@ -8,16 +8,32 @@ namespace PotionSeller2
 {
     class Potion
     {
-        readonly Effect[] effects;
-        readonly Ingredient[] ingredients;
+        public readonly Effect[] effects;
+        public readonly Ingredient[] ingredients;
         public Potion(Ingredient[] ingredients)
         {
+            //Get a list of unique ingredients
+            List<Ingredient> cleanedIngredients = new List<Ingredient>();
+            foreach(Ingredient inputIngredient in ingredients)
+            {
+                bool unique = true;
+                foreach(Ingredient internalIngredient in cleanedIngredients)
+                    if(inputIngredient.GetHashCode() == internalIngredient.GetHashCode())
+                    {
+                        unique = false;
+                        break;
+                    }
+                if (unique)
+                    cleanedIngredients.Add(inputIngredient);
+            }
             //get all effects 2 or more ingredients have in common
             List<Effect> potionEffects = new List<Effect>();
-            for (int i=0;i<ingredients.Count();i++)
-                for(int j = i + 1; j < ingredients.Count(); j++)
+            for (int i=0;i<cleanedIngredients.Count();i++)
+                for(int j = i + 1; j < cleanedIngredients.Count(); j++)
                 {
-                    foreach (Effect effect in ingredients[i].GetCommonEffects(ingredients[j]))
+                    Ingredient a = cleanedIngredients[i];
+                    Ingredient b = cleanedIngredients[j];
+                    foreach (Effect effect in cleanedIngredients[i].GetCommonEffects(cleanedIngredients[j]))
                         potionEffects.Add(effect);
                 }
             //clean duplicate effects
@@ -29,7 +45,7 @@ namespace PotionSeller2
                 }
             //Collect only contributing ingredients
             List<Ingredient> contributingIngredients = new List<Ingredient>();
-            foreach(Ingredient ingredient in ingredients)
+            foreach(Ingredient ingredient in cleanedIngredients)
             {
                 foreach(Effect effect in potionEffects)
                 {
@@ -61,8 +77,9 @@ namespace PotionSeller2
                 {
                     for(int k = j; k < ingredients.Count; k++)
                     {
-                        Potion potion =new Potion(new Ingredient[] { ingredients[i], ingredients[j], ingredients[k] });
-                        if (potion.effects.Count() > 0 && potion.ingredients.Count() > 0) ;
+                        Ingredient[] ingredientArray = new Ingredient[] { ingredients[i], ingredients[j], ingredients[k] };
+                        Potion potion = new Potion(ingredientArray);
+                        if (potion.effects.Count() > 0 && potion.ingredients.Count() > 0)
                             potions.Add(potion);
                     }
                 }
@@ -91,6 +108,13 @@ namespace PotionSeller2
         }
         #endregion
 
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() == typeof(Potion))
+                return GetHashCode() == ((Potion)obj).GetHashCode();
+            else
+                return base.Equals(obj);
+        }
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
@@ -114,6 +138,17 @@ namespace PotionSeller2
             int ingredientHash = potion.GetIngredientHashCode();
             int effectHash = potion.GetEffectHashCode();
             return ingredientHash ^ effectHash;
+        }
+    }
+    internal class PotionEffectComparer : IEqualityComparer<Potion>
+    {
+        public bool Equals(Potion a, Potion b)
+        {
+            return a.GetEffectHashCode() == b.GetEffectHashCode();
+        }
+        public int GetHashCode(Potion potion)
+        {
+            return potion.GetEffectHashCode();
         }
     }
 }

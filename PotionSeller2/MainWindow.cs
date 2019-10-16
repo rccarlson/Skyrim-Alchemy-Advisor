@@ -21,10 +21,11 @@ namespace PotionSeller2
                 ingredientBox.Items.Add(ingredient);
             foreach (Effect effect in effectBrowser.GetAllEffects())
                 effectBox.Items.Add(effect);
+            LoadInventory();
 
-            Potion p = new Potion(new Ingredient[] { IngredientBrowser.GetAllIngredients()[1],
-            IngredientBrowser.GetAllIngredients()[2],
-            IngredientBrowser.GetAllIngredients()[4]});
+            //Potion p = new Potion(new Ingredient[] { IngredientBrowser.GetAllIngredients()[0],
+            //IngredientBrowser.GetAllIngredients()[1],
+            //IngredientBrowser.GetAllIngredients()[2]});
         }
 
         private void CalculateButton_Click(object sender, EventArgs e)
@@ -37,8 +38,77 @@ namespace PotionSeller2
         }
         void CalculatePotions()
         {
+            SaveInventory();
+            
+            //Calculate potions
             List<Ingredient> checkedIngredients = new List<Ingredient>(ingredientBox.CheckedItems.Cast<Ingredient>());
             List<Potion> potions = Potion.GetAllPotions(checkedIngredients);
+
+            //Populate search results with unique effect combinations
+            searchResultBox.Items.Clear();
+            potions.ForEach(p => searchResultBox.Items.Add(p));
+
+            //Get unique effect strings and sort by number of effects
+            List<Potion> uniqueEffectPotions = new List<Potion>(potions.Distinct(new PotionEffectComparer()));
+            bool madeChange;
+            do
+            {
+                madeChange = false;
+                for(int i=0;i<uniqueEffectPotions.Count;i++)
+                    for(int j = i + 1; j < uniqueEffectPotions.Count; j++)
+                        if(uniqueEffectPotions[i].effects.Count() < uniqueEffectPotions[j].effects.Count())
+                        {
+                            Potion temp = uniqueEffectPotions[i];
+                            uniqueEffectPotions[i] = uniqueEffectPotions[j];
+                            uniqueEffectPotions[j] = temp;
+                            madeChange = true;
+                        }
+            } while (madeChange == true);
+            searchResultBox.Items.Clear();
+            uniqueEffectPotions.ForEach(p => searchResultBox.Items.Add(Effect.GetEffectString(p.effects)));
+
+
         }
+        #region INVENTORY STORAGE
+        /// <summary>
+        /// Saves inventory preferances to storage
+        /// </summary>
+        void SaveInventory()
+        {
+            //Clear application settings
+            PotionSeller2.Properties.Settings.Default.Ingredients.Clear();
+
+            //Save items to settings
+            foreach (Ingredient ingredient in ingredientBox.CheckedItems)
+            {
+                PotionSeller2.Properties.Settings.Default.Ingredients.Add(ingredient.name);
+            }
+            PotionSeller2.Properties.Settings.Default.Save();
+        }
+        /// <summary>
+        /// Loads inventory preferences from storage
+        /// </summary>
+        void LoadInventory()
+        {
+            //PotionSeller2.Properties.Settings.Default.Reload();
+            try
+            {
+                foreach (string ingredientName in PotionSeller2.Properties.Settings.Default.Ingredients)
+                {
+                    for (int i = 0; i < ingredientBox.Items.Count; i++)
+                    {
+                        if (ingredientName == ((Ingredient)ingredientBox.Items[i]).name)
+                        {
+                            ingredientBox.SetItemChecked(i, true);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                PotionSeller2.Properties.Settings.Default.Reset();
+            }
+        }
+        #endregion
     }
 }
