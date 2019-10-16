@@ -21,11 +21,12 @@ namespace PotionSeller2
                 ingredientBox.Items.Add(ingredient);
             foreach (Effect effect in effectBrowser.GetAllEffects())
                 effectBox.Items.Add(effect);
+
+            for (int i = 100; i > 0; i--)
+                alchemySkill.Items.Add(i);
+
             LoadInventory();
 
-            //Potion p = new Potion(new Ingredient[] { IngredientBrowser.GetAllIngredients()[0],
-            //IngredientBrowser.GetAllIngredients()[1],
-            //IngredientBrowser.GetAllIngredients()[2]});
         }
 
         private void CalculateButton_Click(object sender, EventArgs e)
@@ -46,7 +47,7 @@ namespace PotionSeller2
 
             //Populate search results with unique effect combinations
             searchResultBox.Items.Clear();
-            potions.ForEach(p => searchResultBox.Items.Add(p));
+            potions.ForEach(p => searchResultBox.Items.Add(p.ToString()));
 
             //Get unique effect strings and sort by number of effects
             List<Potion> uniqueEffectPotions = new List<Potion>(potions.Distinct(new PotionEffectComparer()));

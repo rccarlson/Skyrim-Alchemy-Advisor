@@ -10,15 +10,25 @@ namespace PotionSeller2
     {
         public readonly Effect[] effects;
         public readonly Ingredient[] ingredients;
-        public Potion(Ingredient[] ingredients)
+        readonly int alchemySkill, fortifyAlchemy;
+        readonly bool physicianPerk, poisonerPerk, purityPerk;
+        public enum PotionType { POTION, POISON };
+        public Potion(Ingredient[] ingredients, int alchemySkill = 15, int fortifyAlchemy = 0, bool physicianPerk = false, bool poisonerPerk = false, bool purityPerk = false)
         {
+            //Copy variables
+            this.alchemySkill = alchemySkill;
+            this.fortifyAlchemy = fortifyAlchemy;
+            this.physicianPerk = physicianPerk;
+            this.poisonerPerk = poisonerPerk;
+            this.purityPerk = purityPerk;
+
             //Get a list of unique ingredients
             List<Ingredient> cleanedIngredients = new List<Ingredient>();
-            foreach(Ingredient inputIngredient in ingredients)
+            foreach (Ingredient inputIngredient in ingredients)
             {
                 bool unique = true;
-                foreach(Ingredient internalIngredient in cleanedIngredients)
-                    if(inputIngredient.GetHashCode() == internalIngredient.GetHashCode())
+                foreach (Ingredient internalIngredient in cleanedIngredients)
+                    if (inputIngredient.GetHashCode() == internalIngredient.GetHashCode())
                     {
                         unique = false;
                         break;
@@ -28,8 +38,8 @@ namespace PotionSeller2
             }
             //get all effects 2 or more ingredients have in common
             List<Effect> potionEffects = new List<Effect>();
-            for (int i=0;i<cleanedIngredients.Count();i++)
-                for(int j = i + 1; j < cleanedIngredients.Count(); j++)
+            for (int i = 0; i < cleanedIngredients.Count(); i++)
+                for (int j = i + 1; j < cleanedIngredients.Count(); j++)
                 {
                     Ingredient a = cleanedIngredients[i];
                     Ingredient b = cleanedIngredients[j];
@@ -45,9 +55,9 @@ namespace PotionSeller2
                 }
             //Collect only contributing ingredients
             List<Ingredient> contributingIngredients = new List<Ingredient>();
-            foreach(Ingredient ingredient in cleanedIngredients)
+            foreach (Ingredient ingredient in cleanedIngredients)
             {
-                foreach(Effect effect in potionEffects)
+                foreach (Effect effect in potionEffects)
                 {
                     if (ingredient.HasEffect(effect))
                     {
