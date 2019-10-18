@@ -34,6 +34,18 @@ namespace PotionSeller2
             builder.Append(effects[effects.Length - 1]);
             return builder.ToString();
         }
+        
+        public static Effect GetHighestValueEffect(Effect[] effects)
+        {
+            if (effects.Length == 0)
+                return null;
+            Effect highest = effects[0];
+            foreach(Effect effect in effects)
+                if (effect.value > highest.value)
+                    highest = effect;
+            return highest;
+        }
+
         public override string ToString()
         {
             return name;
