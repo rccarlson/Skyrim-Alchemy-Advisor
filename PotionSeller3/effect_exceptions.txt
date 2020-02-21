@@ -1,0 +1,28 @@
+﻿Ingredient	Effect	Magnitude	Duration	Value
+Charred Skeever Hide	Cure Disease	1	1	0.36
+Hawk Feathers	Cure Disease	1	1	0.36
+Jarrin Root	Damage Health	100	1	158.5
+River Betty	Damage Health	2.5	1	34.5
+Emperor Parasol Moss	Damage Health	1.5	1	19.7
+Nirnroot	Damage Health	1	1	12.6
+Crimson Nirnroot	Damage Health	3	1	3.3
+Deathbell	Damage Health	1.5	1	1.6
+Poison Bloom	Damage Health	1.5	1	1.6
+Crimson Nirnroot	Damage Stamina	3	1	1
+Briar Heart	Fortify Block	0.5	1	1
+Honneycomb	Fortify Block	0.5	1	1
+Ectoplasm	Fortify Destruction	0.8	1	1
+Nightshade	Fortify Destruction	0.8	1	1
+Boar Tusk	Fortify Health	1	5	5.9
+Giant's Toe	Fortify Health	1	5	5.9
+Boar Tusk	Fortify Stamina	1.25	5	7.5
+Deathbell	Ravage Stamina	1	1	2.1
+Ashen Grass Pod	Resist Fire	1.33	1	1
+Beehive Husk	Resist Poison	0.5	1	1
+Thistle Branch	Resist Poison	0.75	1	1
+Blisterwort	Restore Health	0.6	1	1
+Imp Stool	Restore Health	0.6	1	1
+Netch Jelly	Restore Stamina	2	1	1
+Bear Claws	Restore Stamina	0.8	1	1
+Salmon Roe	Restore Stamina	0.4	1	1
+Salmon Roe	Waterbreathing	1	12	15.4

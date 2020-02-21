@@ -7,6 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PotionSeller", "PotionSelle
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PotionSeller2", "PotionSeller2\PotionSeller2.csproj", "{4BF25BF5-C07C-4B4B-849B-193F6327FE66}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PotionSeller3", "PotionSeller3\PotionSeller3.csproj", "{ABE7DDA5-66D3-4108-AC03-B444374E247C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyrimAlchemy", "SkyrimAlchemy\SkyrimAlchemy.csproj", "{4F3577BC-5933-414B-9E06-EE0148049B25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{76C98ECE-6E06-4AF5-8338-174D410ECB3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyrimAlchemy2", "SkyrimAlchemy2\SkyrimAlchemy2.csproj", "{58074F37-4397-4C7F-A0BD-BA80908880C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +29,22 @@ Global
 		{4BF25BF5-C07C-4B4B-849B-193F6327FE66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BF25BF5-C07C-4B4B-849B-193F6327FE66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BF25BF5-C07C-4B4B-849B-193F6327FE66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABE7DDA5-66D3-4108-AC03-B444374E247C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABE7DDA5-66D3-4108-AC03-B444374E247C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABE7DDA5-66D3-4108-AC03-B444374E247C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABE7DDA5-66D3-4108-AC03-B444374E247C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F3577BC-5933-414B-9E06-EE0148049B25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F3577BC-5933-414B-9E06-EE0148049B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F3577BC-5933-414B-9E06-EE0148049B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F3577BC-5933-414B-9E06-EE0148049B25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76C98ECE-6E06-4AF5-8338-174D410ECB3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76C98ECE-6E06-4AF5-8338-174D410ECB3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76C98ECE-6E06-4AF5-8338-174D410ECB3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76C98ECE-6E06-4AF5-8338-174D410ECB3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58074F37-4397-4C7F-A0BD-BA80908880C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58074F37-4397-4C7F-A0BD-BA80908880C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58074F37-4397-4C7F-A0BD-BA80908880C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58074F37-4397-4C7F-A0BD-BA80908880C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
