@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SkyrimAlchemy2;
+using SkyrimAlchemy;
 
 namespace ConsoleApp1
 {
@@ -11,7 +11,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            double fullRunTime = PotionSpeedTest(100);
+            //double fullRunTime = PotionSpeedTest(100);
             List<Potion> potions = GetAllPotions();
             Potion mvp = potions[0];
 
@@ -33,6 +33,20 @@ namespace ConsoleApp1
             //"Red Mountain Flower",
             //"Sabre Cat Tooth"
             //};
+            List<string> ingStrList = new List<string>() {
+                "Abecean Longfin"
+                ,"Blue Butterfly Wing"
+                ,"Blue Mountain Flower"
+                ,"Bone Meal"
+                ,"Cyrodilic Spadetail"
+                ,"Dragon's Tongue"
+                ,"Fly Amanita"
+                ,"Hanging Moss"
+                ,"Lavender"
+                ,"Luna Moth Wing"
+                ,"Nightshade"
+                ,"Purple Mountain Flower"
+            };
 
             //Ingredient ingredient_a = Ingredient.GetIngredient("Falmer Ear"),
             //    ingredient_b = Ingredient.GetIngredient("Human Heart");
@@ -50,15 +64,18 @@ namespace ConsoleApp1
             //    purity: false
             //    );
 
-            //List<Potion> potions = Potion.GetPotions(ingStrList,
-            //    alchemySkill: 100,
-            //    fortifyAlchemy: 329820352,
-            //    alchemistPerk: 100,
-            //    physicianPerk: true,
-            //    benefactorPerk: true,
-            //    poisonerPerk: true,
-            //    seekerOfShadows: false,
-            //    purity: true);
+            List<Potion> potionSearch = Potion.GetPotions(ingStrList,
+                alchemySkill: 100,
+                fortifyAlchemy: 1194248,
+                alchemistPerk: 0,
+                physicianPerk: false,
+                benefactorPerk: false,
+                poisonerPerk: false,
+                seekerOfShadows: false,
+                purity: false);
+
+            potionSearch.Sort();
+            potionSearch.Reverse();
 
             //var search = new List<Potion>(potions.Where(p => p.ingredients.Any(i => i.name == "Beehive Husk") && p.ingredients.Count == 2));
 
@@ -69,7 +86,7 @@ namespace ConsoleApp1
             //foreach (Potion potion in search)
             //    Console.WriteLine(GetPotionAsDebugString(potion)+"\n\n");
 
-
+            int dummy1 = 0;
         }
 
 
