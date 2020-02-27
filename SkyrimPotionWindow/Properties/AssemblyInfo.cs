@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SkyrimPotionWindow")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Skyrim Potion Calculator")]
+[assembly: AssemblyDescription("Calculates maximum value potions")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SkyrimPotionWindow")]
+[assembly: AssemblyCompany("EagleBirdman")]
+[assembly: AssemblyProduct("Skyrim Potion Calculator")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

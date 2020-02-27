@@ -8,22 +8,166 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SkyrimPotionWindow.Properties
-{
-
-
+namespace SkyrimPotionWindow.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
-    {
-
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.0.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
-        {
-            get
-            {
+        
+        public static Settings Default {
+            get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection SelectedIngredients {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["SelectedIngredients"]));
+            }
+            set {
+                this["SelectedIngredients"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int SaveResolution {
+            get {
+                return ((int)(this["SaveResolution"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int IdleTimeout {
+            get {
+                return ((int)(this["IdleTimeout"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection SelectedEffects {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["SelectedEffects"]));
+            }
+            set {
+                this["SelectedEffects"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int AlchemySkill {
+            get {
+                return ((int)(this["AlchemySkill"]));
+            }
+            set {
+                this["AlchemySkill"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int FortifyAlchemy {
+            get {
+                return ((int)(this["FortifyAlchemy"]));
+            }
+            set {
+                this["FortifyAlchemy"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int AlchemistPerkLevel {
+            get {
+                return ((int)(this["AlchemistPerkLevel"]));
+            }
+            set {
+                this["AlchemistPerkLevel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PhysicianPerk {
+            get {
+                return ((bool)(this["PhysicianPerk"]));
+            }
+            set {
+                this["PhysicianPerk"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool BenefactorPerk {
+            get {
+                return ((bool)(this["BenefactorPerk"]));
+            }
+            set {
+                this["BenefactorPerk"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PoisonerPerk {
+            get {
+                return ((bool)(this["PoisonerPerk"]));
+            }
+            set {
+                this["PoisonerPerk"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PurityPerk {
+            get {
+                return ((bool)(this["PurityPerk"]));
+            }
+            set {
+                this["PurityPerk"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoSearch {
+            get {
+                return ((bool)(this["AutoSearch"]));
+            }
+            set {
+                this["AutoSearch"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SeekerOfShadows {
+            get {
+                return ((bool)(this["SeekerOfShadows"]));
+            }
+            set {
+                this["SeekerOfShadows"] = value;
             }
         }
     }

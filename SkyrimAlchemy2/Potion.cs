@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SkyrimAlchemy
 {
@@ -312,7 +313,7 @@ namespace SkyrimAlchemy
                 foreach (Effect effect in effects.OrderBy(e => GetEffectValue(e)).Reverse())
                 {
                     builder.Append(effect.description
-                        .Replace("<dur>", Convert.ToString(GetEffectDuration(effect)))
+                        .Replace("<dur>", Convert.ToString((int)GetEffectDuration(effect)))
                         .Replace("<mag>", Convert.ToString((int)Math.Round(GetEffectMagnitude(effect)))))
                         .Append(' ');
                 }
