@@ -76,8 +76,9 @@
             this.searchProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.backgroundSettingSaver = new System.ComponentModel.BackgroundWorker();
             this.searchResultUpdater = new System.ComponentModel.BackgroundWorker();
-            this.fortifyAlchemyDomain = new SkyrimPotionWindow.PercentUpDown();
             this.autoSearchWorker = new System.ComponentModel.BackgroundWorker();
+            this.button1 = new System.Windows.Forms.Button();
+            this.fortifyAlchemyDomain = new SkyrimPotionWindow.PercentUpDown();
             this.mainContainer.SuspendLayout();
             this.inputPanel.SuspendLayout();
             this.skillPanel.SuspendLayout();
@@ -215,6 +216,7 @@
             this.skillPanel.Controls.Add(this.fortifyAlchemyDomain, 1, 1);
             this.skillPanel.Controls.Add(this.alchemistPerkComboBox, 1, 2);
             this.skillPanel.Controls.Add(this.alchemistPerkLabel, 0, 2);
+            this.skillPanel.Controls.Add(this.button1, 1, 4);
             this.skillPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.skillPanel.Location = new System.Drawing.Point(777, 23);
             this.skillPanel.Name = "skillPanel";
@@ -235,7 +237,7 @@
             // 
             this.seekerOfShadowsCheckBox.AutoSize = true;
             this.seekerOfShadowsCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.seekerOfShadowsCheckBox.Location = new System.Drawing.Point(3, 174);
+            this.seekerOfShadowsCheckBox.Location = new System.Drawing.Point(3, 180);
             this.seekerOfShadowsCheckBox.Name = "seekerOfShadowsCheckBox";
             this.seekerOfShadowsCheckBox.Size = new System.Drawing.Size(119, 17);
             this.seekerOfShadowsCheckBox.TabIndex = 13;
@@ -284,7 +286,7 @@
             this.benefactorPerkCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.benefactorPerkCheckBox.Location = new System.Drawing.Point(3, 105);
             this.benefactorPerkCheckBox.Name = "benefactorPerkCheckBox";
-            this.benefactorPerkCheckBox.Size = new System.Drawing.Size(119, 17);
+            this.benefactorPerkCheckBox.Size = new System.Drawing.Size(119, 23);
             this.benefactorPerkCheckBox.TabIndex = 8;
             this.benefactorPerkCheckBox.Text = "Benefactor Perk";
             this.benefactorPerkCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -295,7 +297,7 @@
             // 
             this.poisonerPerkCheckBox.AutoSize = true;
             this.poisonerPerkCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.poisonerPerkCheckBox.Location = new System.Drawing.Point(3, 128);
+            this.poisonerPerkCheckBox.Location = new System.Drawing.Point(3, 134);
             this.poisonerPerkCheckBox.Name = "poisonerPerkCheckBox";
             this.poisonerPerkCheckBox.Size = new System.Drawing.Size(119, 17);
             this.poisonerPerkCheckBox.TabIndex = 9;
@@ -308,7 +310,7 @@
             // 
             this.purityPerkCheckBox.AutoSize = true;
             this.purityPerkCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.purityPerkCheckBox.Location = new System.Drawing.Point(3, 151);
+            this.purityPerkCheckBox.Location = new System.Drawing.Point(3, 157);
             this.purityPerkCheckBox.Name = "purityPerkCheckBox";
             this.purityPerkCheckBox.Size = new System.Drawing.Size(119, 17);
             this.purityPerkCheckBox.TabIndex = 10;
@@ -643,6 +645,20 @@
             // 
             this.searchResultUpdater.DoWork += new System.ComponentModel.DoWorkEventHandler(this.searchResultUpdater_DoWork);
             // 
+            // autoSearchWorker
+            // 
+            this.autoSearchWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.AutoSearchWorker_DoWork);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(128, 105);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 14;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // fortifyAlchemyDomain
             // 
             this.fortifyAlchemyDomain.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -657,15 +673,10 @@
             this.fortifyAlchemyDomain.TabIndex = 4;
             this.fortifyAlchemyDomain.ValueChanged += new System.EventHandler(this.ParameterValueChanged);
             // 
-            // autoSearchWorker
-            // 
-            this.autoSearchWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.AutoSearchWorker_DoWork);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1010, 586);
             this.Controls.Add(this.statusStrip1);
@@ -745,6 +756,7 @@
         private System.Windows.Forms.ColumnHeader potionDetailIngredientObtainedColumn;
         private System.Windows.Forms.ToolStripProgressBar searchProgressBar;
         private System.ComponentModel.BackgroundWorker autoSearchWorker;
+        private System.Windows.Forms.Button button1;
     }
 }
 

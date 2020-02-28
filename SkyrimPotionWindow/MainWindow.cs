@@ -25,7 +25,7 @@ namespace SkyrimPotionWindow
 
             LoadAll();
 
-            SetPotionDetail(null);
+            ClearResults();
 
             backgroundSettingSaver.RunWorkerAsync();
 
@@ -182,6 +182,13 @@ namespace SkyrimPotionWindow
         }
         #endregion
 
+        void ClearResults()
+        {
+            resultEffectGroups.Items.Clear();
+            searchResultIngredients.Items.Clear();
+            potionDetailIngredients.Items.Clear();
+            SetPotionDetail(null);
+        }
         void SetPotionDetail(Potion potion)
         {
             if (potion == null)
@@ -273,6 +280,7 @@ namespace SkyrimPotionWindow
                 builder.Append(((CheckBox)sender).Checked ? "checked" : "unchecked");
             Console.WriteLine(builder.ToString());
 #endif
+
         }
         #endregion
 
@@ -290,7 +298,7 @@ namespace SkyrimPotionWindow
                 }
                 autosaveThread.Abort();
             }
-            catch (ObjectDisposedException exception) { }
+            catch (System.InvalidOperationException exception) { }
         }
         private void AutosaveLoop()
         {
@@ -322,8 +330,16 @@ namespace SkyrimPotionWindow
             hash ^= GetListHash(ownedIngredientBox.CheckedItems.Cast<Ingredient>().Select(i => i.name));
             hash ^= GetListHash(desiredEffectBox.CheckedItems.Cast<string>().ToArray());
 
-            hash ^= alchemySkillUpDown.GetHashCode();
-            hash ^= fortifyAlchemyDomain.GetHashCode();
+            if (alchemySkillUpDown.Focused)
+                hash ^= alchemySkillUpDown.GetHashCode();
+            else
+                hash ^= alchemySkillUpDown.Value.GetHashCode();
+
+            if (fortifyAlchemyDomain.Focused)
+                hash ^= fortifyAlchemyDomain.GetHashCode();
+            else
+                hash ^= fortifyAlchemyDomain.Value.GetHashCode();
+
             hash ^= alchemistPerkComboBox.SelectedText.GetHashCode();
 
             hash ^= physicianPerkCheckBox.Checked ? (1 << itemID++) : 0;
@@ -357,7 +373,7 @@ namespace SkyrimPotionWindow
             else
                 return false;
             }
-            catch (ObjectDisposedException exception) { }
+            catch (System.InvalidOperationException exception) { }
             return false;
         }
         #endregion
@@ -418,6 +434,7 @@ namespace SkyrimPotionWindow
                 }
             }
         }
+
         private void searchButton_Click(object sender, EventArgs e)
         {
             Search(writeInputsToDisk: true, updateInPlace: false);
@@ -426,12 +443,6 @@ namespace SkyrimPotionWindow
         {
             Console.WriteLine("Starting search...");
             SaveAll(writeToDisk: writeInputsToDisk);
-            if (!updateInPlace)
-            {
-                resultEffectGroups.Items.Clear();
-                searchResultIngredients.Items.Clear();
-                SetPotionDetail(null);
-            }
 
             this.Invoke(new MethodInvoker(delegate
             {
@@ -535,18 +546,19 @@ namespace SkyrimPotionWindow
                         for (int i = 0; i < effectGrouping.effects.Count; i++)
                             items.Add(new ListViewItem(new string[] { effectGrouping.effects[i], Convert.ToString(effectGrouping.values[i]) }));
 
-                        items = items.OrderBy(i => Convert.ToInt32(i.SubItems[1].Text)).ToList();
+                        items = items.OrderBy(i=>i.SubItems[0].Text).OrderBy(i => Convert.ToInt32(i.SubItems[1].Text)).ToList();
                         items.Reverse();
 
                         this.Invoke(new MethodInvoker(delegate
                         {
-                            resultEffectGroups.Items.Clear();
-                            resultEffectGroups.Items.AddRange(items.ToArray());
+                            //ClearResults();
+                            //resultEffectGroups.Items.AddRange(items.ToArray());
+                            UpdateInPlace(resultEffectGroups, items);
                         }));
                     }
                 }
             }
-            catch (ObjectDisposedException exception) { }
+            catch (System.InvalidOperationException exception) { }
         }
         protected static string GetEffectGroupString(Potion potion)
         {
@@ -602,8 +614,6 @@ namespace SkyrimPotionWindow
             potionDetailIngredients.Items.Clear();
             potionDetailIngredients.Items.AddRange(items.ToArray());
         }
-        #endregion
-
         private void AutoSearchWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             try
@@ -621,7 +631,86 @@ namespace SkyrimPotionWindow
                     }
                 }
             }
-            catch (ObjectDisposedException exception) { }
+            catch (System.InvalidOperationException exception) { }
+        }
+
+        /// <summary>
+        /// Update <paramref name="listView"/> without removing any items that are still valid
+        /// </summary>
+        /// <param name="listView"><see cref="ListView"/> item to be updated</param>
+        /// <param name="newItems">New items to be added</param>
+        void UpdateInPlace(ListView listView, List<ListViewItem> newItems)
+        {
+#if DEBUG
+            List<ListViewItem> originalItems = listView.Items.Cast<ListViewItem>().ToList();
+#endif
+            //Remove invalid extant items
+            for (int i = listView.Items.Count - 1; i >= 0; i--)
+            {
+                bool stillValid = newItems.Any(item => item.SubItems[0].Text == listView.Items[i].SubItems[0].Text
+                && item.SubItems[1].Text == listView.Items[i].SubItems[1].Text);
+                if (!stillValid)
+                {
+                    listView.Items.RemoveAt(i);
+                }
+            }
+
+            //Add new items
+            for(int i = 0; i < newItems.Count; i++)
+            {
+                int listViewCount = listView.Items.Count;
+                //if the listview has an item in index i that is not equal to the new item, insert the new item
+                if (listViewCount > i && !(listView.Items[i].SubItems[0].Text == newItems[i].SubItems[0].Text
+                    && listView.Items[i].SubItems[1].Text == newItems[i].SubItems[1].Text))
+                    listView.Items.Insert(i, newItems[i]);
+                //if the listview does not extend to this point, just add it to the end
+                else if (listViewCount <= i)
+                    listView.Items.Add(newItems[i]);
+            }
+
+            if(listView.Items.Count!=newItems.Count)
+            {
+                Console.WriteLine("INVALID UPDATE CREATED. GENERATED RESULT COUNT ("
+                    + Convert.ToString(listView.Items.Count)
+                    + ") DOES NOT EQUAL ACTUAL RESULT COUNT ("
+                    + Convert.ToString(newItems.Count)
+                    + ")");
+#if DEBUG
+                List<ListViewItem> failedToRemove = listView.Items.Cast<ListViewItem>().ToList()
+                    .Where(item => !newItems
+                        .Any(i => i.SubItems[0].Text == item.SubItems[0].Text && i.SubItems[1].Text == item.SubItems[1].Text))
+                    .ToList();
+                List<ListViewItem> failedToAdd = newItems.Where(item => !listView.Items.Cast<ListViewItem>().Any(i =>
+                i.SubItems[0].Text == item.SubItems[0].Text && i.SubItems[1].Text == item.SubItems[1].Text
+                )).ToList();
+                List<ListViewItem> duplicateItems = listView.Items.Cast<ListViewItem>().Where(item =>
+                listView.Items.Cast<ListViewItem>().Count(i =>
+                i.SubItems[0].Text == item.SubItems[0].Text && i.SubItems[1].Text == item.SubItems[1].Text) > 1).ToList();
+                List<ListViewItem> listViewAsList = listView.Items.Cast<ListViewItem>().ToList();
+#endif
+                int dummy = 0;
+#if DEBUG
+                listView.Items.Clear();
+                listView.Items.AddRange(originalItems.ToArray());
+                UpdateInPlace(listView, newItems);
+#endif
+            }
+        }
+        #endregion
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Random random = new Random();
+            //for(int i = 0; i < 50; i++)
+            //{
+            //    int index = random.Next(0, ownedIngredientBox.Items.Count);
+            //    bool currChecked = ownedIngredientBox.GetItemChecked(index);
+            //    ownedIngredientBox.SetItemChecked(index, !currChecked);
+            //}
+            for(int i = 0; i < ownedIngredientBox.Items.Count; i++)
+            {
+                ownedIngredientBox.SetItemChecked(i, random.Next() % 2 == 0);
+            }
         }
     }
 }
