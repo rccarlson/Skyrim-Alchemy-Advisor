@@ -21,13 +21,18 @@ namespace SkyrimPotionWindow
         {
             InitializeComponent();
 
+            button1.Visible = false;
+#if DEBUG
+            button1.Visible = true;
+#endif
+
             searchProgressBar.Visible = false;
 
             LoadAll();
 
             ClearResults();
 
-            backgroundSettingSaver.RunWorkerAsync();
+            autoSaveWorker.RunWorkerAsync();
 
             searchResultUpdater.RunWorkerAsync();
 
@@ -39,15 +44,6 @@ namespace SkyrimPotionWindow
         #region SAVE/LOAD
         void LoadIngredients()
         {
-            //Initialize Properties
-            if (Properties.Settings.Default.SelectedIngredients == null)
-            {
-                Console.WriteLine("Ingredients Setting not found. Initializing...");
-                Properties.Settings.Default.SelectedIngredients = new System.Collections.Specialized.StringCollection();
-            }
-
-            var collection = Properties.Settings.Default.SelectedIngredients;
-
             //load all ingredients to UI
             ownedIngredientBox.Items.AddRange(Ingredient.ingredients.ToArray());
 
@@ -55,6 +51,17 @@ namespace SkyrimPotionWindow
             List<string> ingredientStringList = Ingredient.ingredients
                 .Select(i => i.name)
                 .ToList();
+
+            //Load Properties from settings
+            if (Properties.Settings.Default.SelectedIngredients == null)
+            {
+                Console.WriteLine("Ingredients Setting not found. Initializing...");
+                Properties.Settings.Default.SelectedIngredients = new System.Collections.Specialized.StringCollection();
+                SetAllChecked(ownedIngredientBox, true);
+                return;
+            }
+
+            var collection = Properties.Settings.Default.SelectedIngredients;
 
             //check all items from settings
             foreach (string ingredient in collection.Cast<string>().ToList())
@@ -81,15 +88,6 @@ namespace SkyrimPotionWindow
 
         void LoadEffects()
         {
-            //Initialize Effects
-            if (Properties.Settings.Default.SelectedEffects == null)
-            {
-                Console.WriteLine("Effects Setting not found. Initializing...");
-                Properties.Settings.Default.SelectedEffects = new System.Collections.Specialized.StringCollection();
-            }
-
-            var collection = Properties.Settings.Default.SelectedEffects;
-
             //load all effect names
             List<string> effectNames = new List<string>();
             Ingredient.ingredients.ForEach(i =>
@@ -105,6 +103,17 @@ namespace SkyrimPotionWindow
             });
             effectNames.Sort();
             desiredEffectBox.Items.AddRange(effectNames.ToArray());
+
+            //Load Effects from settings
+            if (Properties.Settings.Default.SelectedEffects == null)
+            {
+                Console.WriteLine("Effects Setting not found. Initializing...");
+                Properties.Settings.Default.SelectedEffects = new System.Collections.Specialized.StringCollection();
+                SetAllChecked(desiredEffectBox, true);
+                return;
+            }
+
+            var collection = Properties.Settings.Default.SelectedEffects;
 
             //check all items from settings
             foreach (string effect in collection.Cast<string>().ToList())
@@ -200,7 +209,7 @@ namespace SkyrimPotionWindow
             else
             {
                 potionDetailName.Text = potion.Name;
-                potionDetailDescription.Text = "Description: " + potion.Description;
+                potionDetailDescription.Text = potion.Description;
                 potionDetailValue.Text = "Value: " + Convert.ToString(potion.Value);
             }
         }
@@ -522,10 +531,10 @@ namespace SkyrimPotionWindow
             }
             if (token.IsCancellationRequested)
                 Console.WriteLine("Aborted search");
-            this.Invoke(new MethodInvoker(delegate
-            {
-                searchProgressBar.Visible = false;
-            }));
+            //this.Invoke(new MethodInvoker(delegate
+            //{
+            //    searchProgressBar.Visible = false;
+            //}));
             return effectGrouping;
         }
         private void searchResultUpdater_DoWork(object sender, DoWorkEventArgs e)
@@ -554,6 +563,7 @@ namespace SkyrimPotionWindow
                             //ClearResults();
                             //resultEffectGroups.Items.AddRange(items.ToArray());
                             UpdateInPlace(resultEffectGroups, items);
+                            searchProgressBar.Visible = false;
                         }));
                     }
                 }
@@ -644,28 +654,51 @@ namespace SkyrimPotionWindow
 #if DEBUG
             List<ListViewItem> originalItems = listView.Items.Cast<ListViewItem>().ToList();
 #endif
-            //Remove invalid extant items
-            for (int i = listView.Items.Count - 1; i >= 0; i--)
+            if (newItems.Count==0)
             {
-                bool stillValid = newItems.Any(item => item.SubItems[0].Text == listView.Items[i].SubItems[0].Text
-                && item.SubItems[1].Text == listView.Items[i].SubItems[1].Text);
+                //If updating to no items, clear everything
+                listView.Items.Clear();
+                return;
+            }
+            if(listView.Items.Count == 0)
+            {
+                //If nothing currently displayed, copy everything
+                listView.Items.AddRange(newItems.ToArray());
+                return;
+            }
+
+            List<ListViewItem> emulatedView = listView.Items.Cast<ListViewItem>().ToList();
+
+
+            //Remove invalid extant items
+            for (int i = emulatedView.Count - 1; i >= 0; i--)
+            {
+                bool stillValid = newItems.Any(item => item.SubItems[0].Text == emulatedView[i].SubItems[0].Text
+                && item.SubItems[1].Text == emulatedView[i].SubItems[1].Text);
                 if (!stillValid)
                 {
                     listView.Items.RemoveAt(i);
+                    emulatedView.RemoveAt(i);
                 }
             }
 
             //Add new items
             for(int i = 0; i < newItems.Count; i++)
             {
-                int listViewCount = listView.Items.Count;
+                int listViewCount = emulatedView.Count;
                 //if the listview has an item in index i that is not equal to the new item, insert the new item
-                if (listViewCount > i && !(listView.Items[i].SubItems[0].Text == newItems[i].SubItems[0].Text
-                    && listView.Items[i].SubItems[1].Text == newItems[i].SubItems[1].Text))
+                if (listViewCount > i && !(emulatedView[i].SubItems[0].Text == newItems[i].SubItems[0].Text
+                    && emulatedView[i].SubItems[1].Text == newItems[i].SubItems[1].Text))
+                {
                     listView.Items.Insert(i, newItems[i]);
+                    emulatedView.Insert(i, newItems[i]);
+                }
                 //if the listview does not extend to this point, just add it to the end
                 else if (listViewCount <= i)
+                {
                     listView.Items.Add(newItems[i]);
+                    emulatedView.Add(newItems[i]);
+                }
             }
 
             if(listView.Items.Count!=newItems.Count)
@@ -701,16 +734,11 @@ namespace SkyrimPotionWindow
         private void button1_Click(object sender, EventArgs e)
         {
             Random random = new Random();
-            //for(int i = 0; i < 50; i++)
-            //{
-            //    int index = random.Next(0, ownedIngredientBox.Items.Count);
-            //    bool currChecked = ownedIngredientBox.GetItemChecked(index);
-            //    ownedIngredientBox.SetItemChecked(index, !currChecked);
-            //}
-            for(int i = 0; i < ownedIngredientBox.Items.Count; i++)
-            {
-                ownedIngredientBox.SetItemChecked(i, random.Next() % 2 == 0);
-            }
+            foreach (var box in new CheckedListBox[] { ownedIngredientBox, desiredEffectBox })
+                for (int i = 0; i < box.Items.Count; i++)
+                {
+                    box.SetItemChecked(i, random.Next() % 2 == 0);
+                }
         }
     }
 }
