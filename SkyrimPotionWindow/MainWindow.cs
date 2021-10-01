@@ -21,9 +21,10 @@ namespace SkyrimPotionWindow
         {
             InitializeComponent();
 
-            button1.Visible = false;
 #if DEBUG
             button1.Visible = true;
+#else
+            button1.Visible = false;
 #endif
 
             searchProgressBar.Visible = false;
@@ -392,58 +393,7 @@ namespace SkyrimPotionWindow
         EffectGrouping effectGrouping = null;
         int lastSearchInputHash = 0;
         System.Threading.CancellationTokenSource searchCancelToken = new System.Threading.CancellationTokenSource();
-        private class EffectGrouping
-        {
-            public readonly List<string> effects = new List<string>();
-            public readonly List<int> values = new List<int>();
-            public readonly List<List<Potion>> potions = new List<List<Potion>>();
-            int maxIndex = -1;
-            public EffectGrouping() { }
-            public EffectGrouping(List<Potion> potions)
-            {
-                foreach (Potion potion in potions)
-                    Add(potion);
-            }
-            int IndexOfEffect(string effectString, int value)
-            {
-                for (int i = 0; i < effects.Count; i++)
-                {
-                    if (effects[i] == effectString && values[i] == value)
-                    {
-                        return i;
-                    }
-                }
-                return -1;
-            }
-            public void Add(Potion potion)
-            {
-                string effectString = MainWindow.GetEffectGroupString(potion);
-                int value = potion.Value;
-                int index = IndexOfEffect(effectString, value);
-                if (index < 0)
-                {
-                    effects.Add(effectString);
-                    values.Add(value);
-                    potions.Add(new List<Potion>() { potion });
-                    maxIndex++;
-                }
-                else
-                {
-                    potions[index].Add(potion);
-                }
-            }
-            public List<Potion> GetPotions(string effectString, int value)
-            {
-                int index = IndexOfEffect(effectString, value);
-                if (index < 0)
-                    return null;
-                else
-                {
-                    return potions[index].OrderBy(l => l.ingredients.Count).ToList();
-                }
-            }
-        }
-
+        
         private void searchButton_Click(object sender, EventArgs e)
         {
             Search(writeInputsToDisk: true, updateInPlace: false);
@@ -467,6 +417,14 @@ namespace SkyrimPotionWindow
                 lastSearchInputHash = GetInputHash();
             }));
             Console.WriteLine("search started");
+        }
+        private IEnumerable<(Ingredient, Ingredient, Ingredient)> EnumerateAllIngredientsCombinations(List<Ingredient> ingredients)
+        {
+            int length = ingredients.Count;
+            for (int i = 0; i < length; i++)
+                for (int j = i + 1; j < length; j++)
+                    for (int k = j; k < length; k++)
+                        yield return (ingredients[i], ingredients[j], ingredients[k]);
         }
         EffectGrouping GetPotions(System.Threading.CancellationToken token)
         {
@@ -569,19 +527,6 @@ namespace SkyrimPotionWindow
                 }
             }
             catch (System.InvalidOperationException exception) { }
-        }
-        protected static string GetEffectGroupString(Potion potion)
-        {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < potion.effects.Count; i++)
-            {
-                if (i != 0)
-                {
-                    builder.Append(", ");
-                }
-                builder.Append(potion.effects[i].name);
-            }
-            return builder.ToString();
         }
 
         private void ResultEffectGroups_SelectedIndexChanged(object sender, EventArgs e)
