@@ -46,7 +46,6 @@
             this.poisonerPerkCheckBox = new System.Windows.Forms.CheckBox();
             this.purityPerkCheckBox = new System.Windows.Forms.CheckBox();
             this.alchemySkillUpDown = new System.Windows.Forms.NumericUpDown();
-            this.fortifyAlchemyDomain = new SkyrimPotionWindow.PercentUpDown();
             this.alchemistPerkComboBox = new System.Windows.Forms.ComboBox();
             this.alchemistPerkLabel = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -79,16 +78,17 @@
             this.autoSaveWorker = new System.ComponentModel.BackgroundWorker();
             this.searchResultUpdater = new System.ComponentModel.BackgroundWorker();
             this.autoSearchWorker = new System.ComponentModel.BackgroundWorker();
+            this.fortifyAlchemyDomain = new SkyrimPotionWindow.PercentUpDown();
             this.mainContainer.SuspendLayout();
             this.inputPanel.SuspendLayout();
             this.skillPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.alchemySkillUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fortifyAlchemyDomain)).BeginInit();
             this.ownedIngredientPanel.SuspendLayout();
             this.targetEffectPanel.SuspendLayout();
             this.resultPanel.SuspendLayout();
             this.potionDetailPanel.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fortifyAlchemyDomain)).BeginInit();
             this.SuspendLayout();
             // 
             // mainContainer
@@ -337,20 +337,6 @@
             0,
             0});
             this.alchemySkillUpDown.ValueChanged += new System.EventHandler(this.ParameterValueChanged);
-            // 
-            // fortifyAlchemyDomain
-            // 
-            this.fortifyAlchemyDomain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fortifyAlchemyDomain.Location = new System.Drawing.Point(128, 29);
-            this.fortifyAlchemyDomain.Maximum = new decimal(new int[] {
-            2147483647,
-            0,
-            0,
-            0});
-            this.fortifyAlchemyDomain.Name = "fortifyAlchemyDomain";
-            this.fortifyAlchemyDomain.Size = new System.Drawing.Size(93, 20);
-            this.fortifyAlchemyDomain.TabIndex = 4;
-            this.fortifyAlchemyDomain.ValueChanged += new System.EventHandler(this.ParameterValueChanged);
             // 
             // alchemistPerkComboBox
             // 
@@ -660,6 +646,7 @@
             // 
             this.searchProgressBar.Name = "searchProgressBar";
             this.searchProgressBar.Size = new System.Drawing.Size(150, 16);
+            this.searchProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             // 
             // autoSaveWorker
             // 
@@ -672,6 +659,20 @@
             // autoSearchWorker
             // 
             this.autoSearchWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.AutoSearchWorker_DoWork);
+            // 
+            // fortifyAlchemyDomain
+            // 
+            this.fortifyAlchemyDomain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fortifyAlchemyDomain.Location = new System.Drawing.Point(128, 29);
+            this.fortifyAlchemyDomain.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.fortifyAlchemyDomain.Name = "fortifyAlchemyDomain";
+            this.fortifyAlchemyDomain.Size = new System.Drawing.Size(93, 20);
+            this.fortifyAlchemyDomain.TabIndex = 4;
+            this.fortifyAlchemyDomain.ValueChanged += new System.EventHandler(this.ParameterValueChanged);
             // 
             // MainWindow
             // 
@@ -690,7 +691,6 @@
             this.skillPanel.ResumeLayout(false);
             this.skillPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.alchemySkillUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fortifyAlchemyDomain)).EndInit();
             this.ownedIngredientPanel.ResumeLayout(false);
             this.ownedIngredientPanel.PerformLayout();
             this.targetEffectPanel.ResumeLayout(false);
@@ -700,6 +700,7 @@
             this.potionDetailPanel.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fortifyAlchemyDomain)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

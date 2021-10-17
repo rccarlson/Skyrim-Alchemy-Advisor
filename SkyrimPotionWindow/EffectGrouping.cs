@@ -13,7 +13,7 @@ namespace SkyrimPotionWindow
         public readonly List<List<Potion>> potions = new List<List<Potion>>();
         int maxIndex = -1;
         public EffectGrouping() { }
-        public EffectGrouping(List<Potion> potions)
+        public EffectGrouping(IEnumerable<Potion> potions)
         {
             foreach (Potion potion in potions)
                 Add(potion);
